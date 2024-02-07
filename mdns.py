@@ -8,7 +8,7 @@ from dnslib.dns import *
 
 import devspec
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 MDNS_IP = '224.0.0.251'
 MDNS_PORT = 5353

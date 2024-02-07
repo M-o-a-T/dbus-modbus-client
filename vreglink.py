@@ -3,6 +3,9 @@ import struct
 
 from vedbus import VeDbusItemExport
 
+import logging
+log = logging.getLogger(__name__)
+
 class VregLinkItem(VeDbusItemExport):
     def __init__(self, *args, getvreg=None, setvreg=None, **kwargs):
         super().__init__(*args, **kwargs)

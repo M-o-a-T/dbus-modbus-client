@@ -10,7 +10,7 @@ import device
 import devspec
 import probe
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 MODBUS_UNIT_MIN = 1
 MODBUS_UNIT_MAX = 247

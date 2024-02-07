@@ -5,7 +5,7 @@ import time
 import client
 import utils
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 device_types = []
 
