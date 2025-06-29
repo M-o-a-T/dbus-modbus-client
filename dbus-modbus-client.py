@@ -36,7 +36,7 @@ import smappee
 import victron_em
 
 import logging
-log = logging.getLogger()
+log = logging.getLogger("d-modbus-client")
 
 NAME = os.path.basename(__file__)
 VERSION = '1.71'
