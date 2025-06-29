@@ -5,6 +5,9 @@ from register import *
 from victron_regs import *
 import vreglink
 
+import logging
+log = logging.getLogger(__name__)
+
 phase_sequences = [
     'L1-L2-L3',
     'L1-L3-L2',

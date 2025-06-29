@@ -4,7 +4,7 @@ import os
 import threading
 import time
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 class Watchdog:
     def __init__(self, timeout=30):

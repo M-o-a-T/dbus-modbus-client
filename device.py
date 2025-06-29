@@ -12,10 +12,18 @@ import __main__
 from register import Reg
 from utils import *
 
+log = logging.getLogger(__name__)
+
 class RegList(list):
     def __init__(self, access=None, regs=[]):
         super().__init__(regs)
         self.access = access
+
+def pack_regs(method, regs):
+    rr = []
+    for r in regs:
+        rr += r if isinstance(r, list) else [r]
+    rr.sort(key=lambda r: r.base)
 
 def modbus_overhead(method):
     overhead = 5 + 2                # request + response

@@ -2,6 +2,9 @@ import device
 import probe
 from register import *
 
+import logging
+log = logging.getLogger(__name__)
+
 class Reg_ver(Reg, str):
     def __init__(self, base, name):
         super().__init__(base, 1, name)

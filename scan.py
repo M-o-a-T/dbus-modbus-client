@@ -10,7 +10,7 @@ import device
 import devspec
 import probe
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 MODBUS_UNIT_MIN = 1
 MODBUS_UNIT_MAX = 247
@@ -45,13 +45,13 @@ class Scanner:
             t1 = time.time()
         except ScanAborted:
             pass
-        except Exception:
-            log.exception('Error during bus scan')
-
-        if self.running:
-            log.info('Scan completed in %d seconds', t1 - t0)
+        except Exception as exc:
+            log.warn('Exception during bus scan', exc_info=exc)
         else:
-            log.info('Scan aborted')
+            if self.running:
+                log.info('Scan completed in %d seconds', t1 - t0)
+            else:
+                log.info('Scan aborted')
 
         self.running = False
 

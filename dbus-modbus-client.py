@@ -7,6 +7,11 @@ import faulthandler
 from functools import partial
 import os
 import pymodbus.constants
+<<<<<<< HEAD
+=======
+from pymodbus.exceptions import ModbusException
+from settingsdevice import SettingsDevice
+>>>>>>> af50378 (Handle only Modbus exceptions with a timeout)
 import signal
 import sys
 import time
@@ -167,13 +172,19 @@ class Client:
         try:
             dev.d.update()
             dev.last_seen = time.time()
-        except Exception as ex:
+        except ModbusException: as ex:
             if time.time() - dev.last_seen > FAIL_TIMEOUT:
                 dev.d.log.info('Device failed: %s', ex)
                 if self.err_exit:
                     os._exit(1)
                 self.dev_failed(dev)
                 self.del_device(dev)
+        except Exception:
+            log.exception('Device %s failed', dev)
+            if self.err_exit:
+                os._exit(1)
+            self.dev_failed(dev)
+            self.del_device(dev)
 
     def probe_filter(self, dev):
         return dev not in self.devices
@@ -431,8 +442,12 @@ def main():
 
     args = parser.parse_args()
 
-    logging.basicConfig(format='%(levelname)-8s %(message)s',
-                        level=(logging.DEBUG if args.debug else logging.INFO))
+    if args.debug:
+        logging.basicConfig(format='%(levelname)-8s %(name)12s:%(lineno)3d %(message)s',
+            level=logging.DEBUG, force=True)
+    else:
+        logging.basicConfig(format='%(levelname)-8s %(message)s',
+            level=logging.INFO, force=True)
 
     logging.getLogger('pymodbus.client.sync').setLevel(logging.CRITICAL)
 
