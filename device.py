@@ -238,7 +238,7 @@ class BaseDevice:
         try:
             val = self.settings['instance'].split(':')
             return val[0], int(val[1])
-        except:
+        except Exception:
             if retry:
                 self.log.info('Invalid role/instance, resetting')
                 self.settings['instance'] = self._settings['instance'][1]
@@ -270,7 +270,7 @@ class BaseDevice:
 
             self.write_register(reg, val)
             return True
-        except:
+        except Exception:
             traceback.print_exc()
 
         return False
@@ -637,7 +637,7 @@ class ErrorId:
         try:
             err = next(filter(None, self.error_ids))
             err_code = self.error_code_offset[self.vendor_id] + err[1]
-        except:
+        except Exception:
             err_code = 0
 
         self.dbus['/ErrorCode'] = err_code

@@ -45,9 +45,8 @@ class Scanner:
             t1 = time.time()
         except ScanAborted:
             pass
-        except:
-            log.warning('Exception during bus scan')
-            traceback.print_exc()
+        except Exception:
+            log.exception('Error during bus scan')
 
         if self.running:
             log.info('Scan completed in %d seconds', t1 - t0)
@@ -93,8 +92,8 @@ class NetScanner(Scanner):
 
             try:
                 probe.probe(m, self.progress, timeout=self.timeout)
-            except:
-                pass
+            except Exception:
+                log.exception("Probing %s", m)
 
             self.hosts.task_done()
 

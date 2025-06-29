@@ -52,7 +52,8 @@ class MDNS:
                                        socket.IP_ADD_MEMBERSHIP,
                                        mreqn(MDNS_IP))
                 self.mcast = True
-            except:
+            except Exception:
+                log.exception("MDNS problem")
                 return
 
         try:
@@ -119,9 +120,8 @@ class MDNS:
                 self.parse_record(rec)
             except DNSError:
                 continue
-            except:
-                log.error('Exception parsing record')
-                traceback.print_exc()
+            except Exception:
+                log.exception('Exception parsing record')
 
     def start(self):
         t = threading.Thread(target=self.run)

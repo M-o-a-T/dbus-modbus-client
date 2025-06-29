@@ -18,7 +18,8 @@ def probe(mlist, pr_cb=None, pr_interval=10, timeout=None, filt=None):
         try:
             modbus = client.make_client(m)
             unit = m.unit
-        except:
+        except Exception:
+            log.exception("Connect to client %s",m)
             continue
 
         if not modbus:
@@ -44,7 +45,8 @@ def probe(mlist, pr_cb=None, pr_interval=10, timeout=None, filt=None):
                     t1 = time.time()
                     if d:
                         break
-            except:
+            except Exception:
+                log.exception("Reading from client %s",m)
                 break
 
             if d:
@@ -123,7 +125,12 @@ class ModelRegister:
             self.reg.decode(rr.registers)
             m = self.models[self.reg.value]
             return m['handler'](spec, modbus, m['model'])
-        except:
+        except KeyError:
+            log.error("Not identified:")
+
+            return None
+        except Exception:
+            log.exception("Decoding %s: %s",self.reg,rr)
             return None
 
     def get_models(self):
