@@ -4,6 +4,9 @@ import dbus
 import ipaddress
 import os
 
+import logging
+log = logging.getLogger("d-modbus-client")
+
 def private_bus():
     '''Return a private D-Bus connection
 
@@ -63,8 +66,8 @@ def get_networks(blacklist):
 
                 net = ipaddress.IPv4Interface(v[2])
                 nets.append(net)
-    except:
-        pass
+    except Exception:
+        log.exception("Problem reading net addrs")
 
     addrs = [n.ip for n in nets]
     nets = list(ipaddress.collapse_addresses([n.network for n in nets]))

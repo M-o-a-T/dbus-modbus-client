@@ -37,7 +37,7 @@ class Reg:
         if hasattr(self.text, '__getitem__'):
             try:
                 return self.text[self.value]
-            except:
+            except Exception:
                 pass
         if callable(self.text):
             return self.text(self.value)

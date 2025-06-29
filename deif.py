@@ -128,8 +128,10 @@ class DEIF_Generator(device.CustomName, device.ErrorId, device.Genset):
                 5 = RMI water temperature
                 6 = RMI fuel level
             """
-            try: return 583 + configs.registers.index(conf_id)
-            except: return fallback
+            try:
+                return 583 + configs.registers.index(conf_id)
+            except Exception:
+                return fallback
 
         fuel_reg = get_reg(6)
         if fuel_reg is not None:

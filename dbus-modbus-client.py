@@ -116,9 +116,8 @@ class Client:
             try:
                 dd = self.init_device(d, False)
                 self.devices.append(dd)
-            except:
-                log.info('Error initialising %s, skipping', d)
-                traceback.print_exc()
+            except Exception as exc:
+                log.info('Error initialising %s, skipping', d, exc=exc)
 
         self.save_devices()
 
@@ -171,7 +170,8 @@ class Client:
             try:
                 dd = self.init_device(d, nosave, enable)
                 self.devices.append(dd)
-            except:
+            except Exception:
+                log.exception("Failed: %s", d.spec)
                 failed.append(d.spec)
                 d.destroy()
 
@@ -268,9 +268,8 @@ class Client:
     def update_timer(self):
         try:
             self.update()
-        except:
-            log.error('Uncaught exception in update')
-            traceback.print_exc()
+        except Exception:
+            log.exception('Uncaught exception in update')
 
         return True
 
