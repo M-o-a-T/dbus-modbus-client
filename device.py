@@ -109,7 +109,11 @@ class BaseDevice:
         if access is None:
             access = self.default_access
 
-        return self.modbus.read_registers(start, count, access, unit=self.unit)
+        if access == "holding":
+            rf = self.modbus.read_holding_registers
+        elif access == "input":
+            rf = self.modbus.read_input_registers
+        return rf(address=start, count=count, slave=self.unit)
 
     def read_register(self, reg):
         rr = self.read_modbus(reg.base, reg.count, reg.access)
@@ -381,7 +385,7 @@ class ModbusDevice(BaseDevice):
         self.unit = spec.unit
         self.model = model
         self.subdevices = []
-        self.latency = modbus.timeout
+        self.latency = modbus.comm_params.timeout_connect
         self.need_reinit = False
         self.log = logging.getLogger(str(self))
         self.log.addFilter(self)

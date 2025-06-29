@@ -104,10 +104,10 @@ serial_ports = {}
 
 def make_client(m):
     if m.method == 'tcp':
-        return TcpClient(m.target, m.port)
+        return TcpClient(m.target, port=m.port)
 
     if m.method == 'udp':
-        return UdpClient(m.target, m.port)
+        return UdpClient(m.target, port=m.port)
 
     tty = m.target
 

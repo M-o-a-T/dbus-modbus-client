@@ -36,11 +36,11 @@ class timeout:
         self.timeout = timeout
 
     def __enter__(self):
-        self.orig_timeout = self.obj.timeout
-        self.obj.timeout = self.timeout
+        self.orig_timeout = self.obj.comm_params.timeout_connect
+        self.obj.comm_params.timeout_connect = self.timeout
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.obj.timeout = self.orig_timeout
+        self.obj.comm_params.timeout_connect = self.orig_timeout
 
 def get_networks(blacklist):
     '''Get IPv4 networks of host

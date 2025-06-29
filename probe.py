@@ -112,8 +112,11 @@ class ModelRegister:
                 raise Exception('connection error')
 
             for acs in self.access:
-                rr = modbus.read_registers(self.reg.base, self.reg.count,
-                                           acs, unit=spec.unit)
+                if acs == "holding":
+                    rf = modbus.read_holding_registers
+                elif acs == "input":
+                    rf = modbus.read_input_registers
+                rr = rf(address=self.reg.base, count=self.reg.count, slave=spec.unit)
                 if not rr.isError():
                     break
 
