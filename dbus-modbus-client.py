@@ -38,12 +38,28 @@ import victron_em
 import logging
 log = logging.getLogger("d-modbus-client")
 
+sys.path.insert(1,sys.path[0]+"/meter-library")
+try:
+    import ABB_B2x
+    import EM24RTU
+    import Eastron_SDM120
+    import Eastron_SDM630v1
+    import Eastron_SDM630v2
+    import Eastron_SDM72D
+except ImportError:
+    pass
+
 NAME = os.path.basename(__file__)
 VERSION = '1.74'
 
 __all__ = ['NAME', 'VERSION']
 
-pymodbus.constants.Defaults.Timeout = 0.5
+try:
+    pymodbus.constants.Defaults.Timeout = 0.5
+except AttributeError:
+    timeout_arg = {"timeout":0.5}
+else:
+    timeout_arg = {}
 
 MODBUS_TCP_PORT = 502
 
@@ -440,9 +456,12 @@ def main():
 
     if args.serial:
         tty = os.path.basename(args.serial)
-        client = SerialClient(tty, args.rate, args.mode, debug=args.debug)
+        client = SerialClient(tty, args.rate, args.mode, debug=args.debug, **timeout_arg)
     else:
         client = NetClient(debug=args.debug)
+    else:
+        client = NetClient()
+        # XXX timeout?
 
     client.err_exit = args.exit
     client.init(args.force_scan)
