@@ -77,7 +77,7 @@ class Device:
         return str(self.d)
 
 class Client:
-    def __init__(self, name):
+    def __init__(self, name, debug=False):
         self.name = name
         self.devices = []
         self.failed = []
@@ -88,7 +88,7 @@ class Client:
         self.err_exit = False
         self.keep_failed = True
         self.svc = None
-        self.watchdog = watchdog.Watchdog()
+        self.watchdog = watchdog.Watchdog(9999 if debug else 30)
 
     def start_scan(self, full=False):
         if self.scanner:
@@ -274,9 +274,9 @@ class Client:
 
         return True
 
-class NetClient(Client):
+class NetClient(Client, **kwargs):
     def __init__(self):
-        super().__init__('tcp')
+        super().__init__('tcp', **kwargs)
 
     def new_scanner(self, full):
         return NetScanner(MODBUS_TCP_PORT, if_blacklist)
@@ -353,8 +353,8 @@ class NetClient(Client):
         return True
 
 class SerialClient(Client):
-    def __init__(self, tty, rate, mode):
-        super().__init__(tty)
+    def __init__(self, tty, rate, mode, **kwargs):
+        super().__init__(tty, **kwargs)
         self.tty = tty
         self.rate = rate
         self.mode = mode
@@ -441,9 +441,9 @@ def main():
 
     if args.serial:
         tty = os.path.basename(args.serial)
-        client = SerialClient(tty, args.rate, args.mode)
+        client = SerialClient(tty, args.rate, args.mode, debug=args.debug)
     else:
-        client = NetClient()
+        client = NetClient(debug=args.debug)
 
     client.err_exit = args.exit
     client.init(args.force_scan)
