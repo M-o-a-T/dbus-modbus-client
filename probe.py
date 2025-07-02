@@ -30,6 +30,7 @@ def probe(mlist, pr_cb=None, pr_interval=10, timeout=None, filt=None):
         for t in device_types:
             if t.methods and m.method not in t.methods:
                 continue
+            log.debug("Probe for %s", next(iter(t.models.values()))["handler"].__name__)
 
             units = [unit] if unit > 0 else t.units
 
@@ -58,6 +59,7 @@ def probe(mlist, pr_cb=None, pr_interval=10, timeout=None, filt=None):
                 break
 
         if not d:
+            log.debug("... not found.")
             failed.append(m)
 
         modbus.put()
