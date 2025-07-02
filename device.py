@@ -3,7 +3,6 @@ from functools import partial
 import logging
 import os
 import time
-import traceback
 
 from settingsdevice import SettingsDevice
 from vedbus import VeDbusService, VeDbusItemImport, ServiceContext
@@ -283,7 +282,7 @@ class BaseDevice:
             self.write_register(reg, val)
             return True
         except Exception:
-            traceback.print_exc()
+            log.exception("Write regs")
 
         return False
 

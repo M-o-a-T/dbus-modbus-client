@@ -3,7 +3,6 @@ import queue
 import threading
 import logging
 import time
-import traceback
 
 from utils import *
 import device

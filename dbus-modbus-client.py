@@ -14,7 +14,6 @@ from settingsdevice import SettingsDevice
 import signal
 import sys
 import time
-import traceback
 from gi.repository import GLib
 
 sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'ext', 'velib_python'))
@@ -50,8 +49,8 @@ try:
     import Eastron_SDM630v1
     import Eastron_SDM630v2
     import Eastron_SDM72D
-except ImportError:
-    pass
+except Exception as exc:
+    log.warning("Loading modules from meter-library failed", exc_info=exc)
 
 NAME = os.path.basename(__file__)
 VERSION = '1.74'

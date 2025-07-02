@@ -129,8 +129,6 @@ class ModelRegister:
             m = self.models[self.reg.value]
             return m['handler'](spec, modbus, m['model'])
         except KeyError:
-            log.error("Not identified:")
-
             return None
         except Exception:
             log.exception("Decoding %s: %s",self.reg,rr)

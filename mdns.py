@@ -2,7 +2,6 @@ import logging
 import socket
 import struct
 import threading
-import traceback
 
 from dnslib.dns import *
 
