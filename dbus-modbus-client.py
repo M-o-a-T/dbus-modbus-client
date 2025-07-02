@@ -7,11 +7,10 @@ import faulthandler
 from functools import partial
 import os
 import pymodbus.constants
-<<<<<<< HEAD
-=======
+
 from pymodbus.exceptions import ModbusException
 from settingsdevice import SettingsDevice
->>>>>>> af50378 (Handle only Modbus exceptions with a timeout)
+
 import signal
 import sys
 import time
@@ -172,7 +171,7 @@ class Client:
         try:
             dev.d.update()
             dev.last_seen = time.time()
-        except ModbusException: as ex:
+        except ModbusException as ex:
             if time.time() - dev.last_seen > FAIL_TIMEOUT:
                 dev.d.log.info('Device failed: %s', ex)
                 if self.err_exit:
@@ -300,10 +299,7 @@ class Client:
 
         return True
 
-class NetClient(Client, **kwargs):
-    def __init__(self):
-        super().__init__('tcp', **kwargs)
-
+class NetClient(Client):
     def new_scanner(self, full):
         return NetScanner(MODBUS_TCP_PORT, if_blacklist)
 
@@ -473,9 +469,7 @@ def main():
         tty = os.path.basename(args.serial)
         client = SerialClient(tty, args.rate, args.mode, debug=args.debug, **timeout_arg)
     else:
-        client = NetClient(debug=args.debug)
-    else:
-        client = NetClient()
+        client = NetClient('tcp', debug=args.debug)
         # XXX timeout?
 
     client.err_exit = args.exit

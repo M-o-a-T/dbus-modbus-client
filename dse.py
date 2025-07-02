@@ -4,6 +4,7 @@ import device
 import probe
 from register import Reg, Reg_s16, Reg_u16, Reg_s32b, Reg_u32b, Reg_mapu16
 
+import logging
 log = logging.getLogger(__name__)
 
 class Reg_DSE_serial(Reg, str):
