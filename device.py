@@ -156,7 +156,11 @@ class BaseDevice:
         start = regs[0].base
         count = regs[-1].base + regs[-1].count - start
 
-        rr = self.read_modbus(start, count, regs.access)
+        for _ in range(4):
+            rr = self.read_modbus(start, count, regs.access)
+            if not rr.isError():
+                break
+            time.sleep(.5)
 
         latency = time.time() - now
 
